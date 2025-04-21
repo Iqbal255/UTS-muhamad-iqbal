@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile - Home Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-800 font-sans">
+  <!-- Navbar -->
+  <header class="bg-black text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold tracking-wide">Home Store</h1>
+      <nav class="space-x-6">
+        <a href="index.html" class="hover:text-yellow-400">Home</a>
+        <a href="produk.html" class="hover:text-yellow-400">Products</a>
+        <a href="#contact" class="hover:text-yellow-400">Contact</a>
+        <button id="logout-btn" class="bg-black text-white px-4 py-2 rounded hover:bg-yellow-500 transition">Logout</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Profile Section -->
+  <section class="py-20">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-3xl font-bold mb-6">Your Profile</h2>
+      
+      <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+        <h3 class="text-2xl font-semibold mb-4">Personal Information</h3>
+        
+        <div class="mb-4">
+          <p><strong>Name:</strong> John Doe</p>
+          <p><strong>Email:</strong> johndoe@example.com</p>
+        </div>
+
+        <div class="mb-4">
+          <p><strong>Address:</strong> 1234 Main Street, Jakarta, Indonesia</p>
+        </div>
+
+        <div class="mb-6">
+          <p><strong>Phone Number:</strong> +62 812 3456 7890</p>
+        </div>
+
+        <div class="mb-6">
+          <p><strong>Joined on:</strong> January 15, 2025</p>
+        </div>
+
+        <div class="text-center">
+          <a href="edit-profile.html" class="bg-black text-white px-4 py-2 rounded hover:bg-yellow-500 transition">Edit Profile</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact" class="bg-black text-white py-6 mt-10">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <p>&copy; 2025 Home Store. All rights reserved.</p>
+      <p class="text-sm mt-2">Follow us on Instagram @homestore_id</p>
+    </div>
+  </footer>
+
+  <!-- Script untuk Logout -->
+  <script>
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      // Hapus status login dari localStorage
+      localStorage.setItem('isLoggedIn', 'false');
+      window.location.href = 'index.html'; // Arahkan kembali ke halaman utama (home)
+    });
+  </script>
+</body>
+</html>

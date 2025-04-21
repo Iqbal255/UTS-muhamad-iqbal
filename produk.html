@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Products - Home Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-800 font-sans">
+
+  <!-- Navbar -->
+  <header class="bg-black text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold tracking-wide">Home Store</h1>
+      <nav class="space-x-6">
+        <a href="index.html" class="hover:text-yellow-400">Home</a>
+        <a href="produk.html" class="hover:text-yellow-400">Products</a>
+        <a href="keranjang.html" class="hover:text-yellow-400">Cart</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Search & Sorting -->
+  <section class="py-4 bg-gray-100">
+    <div class="max-w-7xl mx-auto px-6 flex flex-wrap gap-4 items-center justify-between">
+      <input 
+        type="text" 
+        id="search-input" 
+        class="border px-4 py-2 rounded w-full sm:w-64" 
+        placeholder="Search products..." 
+        oninput="filterProducts()"
+      />
+      <div class="flex flex-wrap gap-2">
+        <select id="sort-price" class="border px-4 py-2 rounded" onchange="filterProducts()">
+          <option value="">Sort by Price</option>
+          <option value="asc">Low to High</option>
+          <option value="desc">High to Low</option>
+        </select>
+        <select id="sort-material" class="border px-4 py-2 rounded" onchange="filterProducts()">
+          <option value="">Sort by Material</option>
+          <option value="leather">Leather</option>
+          <option value="steel">Stainless Steel</option>
+        </select>
+        <select id="sort-date" class="border px-4 py-2 rounded" onchange="filterProducts()">
+          <option value="">Sort by Date</option>
+          <option value="asc">Newest to Oldest</option>
+          <option value="desc">Oldest to Newest</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product List -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <h3 class="text-3xl font-bold mb-10">All Products</h3>
+      <div id="product-list" class="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3"></div>
+    </div>
+  </section>
+
+  <script>
+    const products = [
+      {
+        code: "ACClassic",
+        name: "Alexander Christie Classic",
+        description: "Stainless steel, leather strap.",
+        price: 1250000,
+        material: "steel",
+        date: "2023-01-01",
+        image: "https://images.unsplash.com/photo-1729044320112-7fad57c029ed?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        code: "ACChronograph",
+        name: "Alexander Christie Chronograph",
+        description: "Sporty & bold design.",
+        price: 1750000,
+        material: "leather",
+        date: "2023-02-01",
+        image: "https://images.unsplash.com/photo-1572546118250-5831eda05059?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        code: "ACPremium",
+        name: "Alexander Christie Premium",
+        description: "Elegant rose gold finish.",
+        price: 2200000,
+        material: "steel",
+        date: "2023-03-01",
+        image: "https://plus.unsplash.com/premium_photo-1728759436692-3e0827511e78?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        code: "ACMinimalist",
+        name: "Alexander Christie Minimalist",
+        description: "Sleek and simple design.",
+        price: 1450000,
+        material: "steel",
+        date: "2023-04-01",
+        image: "https://images.unsplash.com/photo-1690343430066-d4634276895d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGphbSUyMHRhbmdhbnxlbnwwfHwwfHx8MA%3D%3D"
+      },
+      {
+        code: "ACSport",
+        name: "Alexander Christie Sport",
+        description: "Durable rubber strap, sports model.",
+        price: 1550000,
+        material: "leather",
+        date: "2023-05-01",
+        image: "https://images.unsplash.com/photo-1637586509984-28f57a2e0ebc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGphbSUyMHRhbmdhbnxlbnwwfHwwfHx8MA%3D%3D"
+      },
+      {
+        code: "ACRoseGold",
+        name: "Alexander Christie Rose Gold",
+        description: "Rose gold with black dial.",
+        price: 2500000,
+        material: "steel",
+        date: "2023-06-01",
+        image: "https://plus.unsplash.com/premium_photo-1726761846190-e915067ae1d6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fGphbSUyMHRhbmdhbnxlbnwwfHwwfHx8MA%3D%3D"
+      },
+      {
+        code: "ACLuxury",
+        name: "Alexander Christie Luxury",
+        description: "High-end materials and finish.",
+        price: 3000000,
+        material: "leather",
+        date: "2023-07-01",
+        image: "https://images.unsplash.com/photo-1519315910113-861dcfbfb9cf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGphbSUyMHRhbmdhbnxlbnwwfHwwfHx8MA%3D%3D"
+      },
+      {
+        code: "ACStainless",
+        name: "Alexander Christie Stainless Steel",
+        description: "Sleek stainless steel design.",
+        price: 1800000,
+        material: "steel",
+        date: "2023-08-01",
+        image: "https://images.unsplash.com/photo-1720496074567-73e8ce14d5f9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGphbSUyMHRhbmdhbnxlbnwwfHwwfHx8MA%3D%3D"
+      },
+      {
+        code: "ACClassicSilver",
+        name: "Alexander Christie Classic Silver",
+        description: "Classic design with a silver finish.",
+        price: 1700000,
+        material: "leather",
+        date: "2023-09-01",
+        image: "https://images.unsplash.com/photo-1698512475185-4a6223bb9685?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8amFtJTIwdGFuZ2FufGVufDB8fDB8fHww"
+      },
+      {
+        code: "ACDiamond",
+        name: "Alexander Christie Diamond",
+        description: "Luxury with diamond accents.",
+        price: 4000000,
+        material: "steel",
+        date: "2023-10-01",
+        image: "https://images.unsplash.com/photo-1520547005736-ddc26a1f65ba?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8amFtJTIwdGFuZ2FufGVufDB8fDB8fHww"
+      }
+    ];
+
+    let filteredProducts = [...products];
+
+    const productList = document.getElementById("product-list");
+
+    function displayProducts(productsToDisplay) {
+      productList.innerHTML = '';
+      productsToDisplay.forEach(product => {
+        const card = document.createElement("div");
+        card.className = "border rounded-lg p-4 shadow hover:shadow-xl";
+
+        card.innerHTML = `
+          <img src="${product.image}" alt="${product.name}" class="w-full h-64 object-cover rounded mb-4" />
+          <h4 class="text-xl font-semibold mb-2">${product.name}</h4>
+          <p class="text-gray-600 mb-2">${product.description}</p>
+          <p class="text-black font-bold mb-2">Rp${product.price.toLocaleString()}</p>
+          <button class="bg-black text-white px-4 py-2 rounded hover:bg-yellow-500 transition" 
+                  onclick="addToCart('${product.code}', '${product.name}', '${product.price}')">
+            Add to Cart
+          </button>
+        `;
+
+        productList.appendChild(card);
+      });
+    }
+
+    function filterProducts() {
+      const searchValue = document.getElementById("search-input").value.toLowerCase();
+      const materialFilter = document.getElementById("sort-material").value;
+      const sortPrice = document.getElementById("sort-price").value;
+      const sortDate = document.getElementById("sort-date").value;
+
+      let filtered = products.filter(product =>
+        product.name.toLowerCase().includes(searchValue) || 
+        product.description.toLowerCase().includes(searchValue)
+      );
+
+      if (materialFilter) {
+        filtered = filtered.filter(product => product.material === materialFilter);
+      }
+
+      if (sortPrice) {
+        filtered = filtered.sort((a, b) => {
+          return sortPrice === "asc" ? a.price - b.price : b.price - a.price;
+        });
+      }
+
+      if (sortDate) {
+        filtered = filtered.sort((a, b) => {
+          return sortDate === "asc" ? new Date(a.date) - new Date(b.date) : new Date(b.date) - new Date(a.date);
+        });
+      }
+
+      displayProducts(filtered);
+    }
+
+    function addToCart(code, name, price) {
+      const product = products.find(p => p.code === code);
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      let existing = cart.find(item => item.code === code);
+      if (existing) {
+        existing.qty = (existing.qty || 1) + 1;
+      } else {
+        cart.push({
+          code,
+          name,
+          price,
+          image: product.image,
+          qty: 1
+        });
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert("Produk berhasil ditambahkan ke keranjang!");
+      window.location.href = "keranjang.html";
+    }
+
+    displayProducts(products);
+  </script>
+
+</body>
+</html>

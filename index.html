@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home Store - Alexander Christie Watches</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-800 font-sans">
+
+  <!-- Navbar -->
+  <header class="bg-black text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold tracking-wide">Home Store</h1>
+      <nav class="space-x-4 flex items-center">
+        <a href="index.html" class="hover:text-yellow-400">Home</a>
+        <a href="produk.html" class="hover:text-yellow-400">Products</a>
+        <a href="#contact" class="hover:text-yellow-400">Contact</a>
+        <button id="login-btn" class="bg-black text-white px-4 py-2 rounded hover:bg-yellow-500 transition">Login</button>
+        <a href="profil.html" id="profile-btn" class="bg-black text-white px-4 py-2 rounded hover:bg-yellow-500 transition hidden">Profile</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="bg-gray-100 py-20">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center">
+      <div class="md:w-1/2 mb-10 md:mb-0">
+        <h2 class="text-4xl font-bold mb-4">Elegan di Pergelangan Tangan Anda</h2>
+        <p class="text-lg text-gray-700 mb-6">Temukan desain abadi dari Alexander Christie di Home Store. Sempurna untuk setiap kesempatan.</p>
+        <a href="produk.html" class="bg-black text-white px-6 py-3 rounded hover:bg-yellow-500 transition">Belanja Sekarang</a>
+      </div>
+      <div class="md:w-full">
+        <img src="https://images.unsplash.com/photo-1589688934051-ca9059383f4f?w=500&auto=format&fit=crop&q=60" alt="Watch Hero" class="rounded-xl shadow-lg w-full object-cover" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section id="products" class="py-16">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <h3 class="text-3xl font-bold mb-10">Koleksi Kami</h3>
+      <div id="product-list" class="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact" class="bg-black text-white py-6 mt-10">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <p>&copy; 2025 Home Store. All rights reserved.</p>
+      <p class="text-sm mt-2">Follow kami di Instagram @homestore_id</p>
+    </div>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+    const loginBtn = document.getElementById('login-btn');
+    const profileBtn = document.getElementById('profile-btn');
+
+    // Tampilkan tombol berdasarkan status login
+    if (isLoggedIn) {
+      loginBtn.classList.add('hidden');
+      profileBtn.classList.remove('hidden');
+    } else {
+      loginBtn.classList.remove('hidden');
+      profileBtn.classList.add('hidden');
+    }
+
+    // Tombol login arahkan ke login.html
+    loginBtn.addEventListener('click', () => {
+      window.location.href = 'login.html';
+    });
+
+    // Tombol profil arahkan ke profil.html
+    profileBtn.addEventListener('click', () => {
+      window.location.href = 'profil.html';
+    });
+
+    // Produk
+    const products = [
+      {
+        name: "Alexander Christie Classic",
+        description: "Stainless steel, leather strap.",
+        price: "Rp1.250.000",
+        image: "https://images.unsplash.com/photo-1729044320112-7fad57c029ed?w=500&auto=format&fit=crop&q=60",
+        detailPage: "produk-detail.html?product=ACClassic"
+      },
+      {
+        name: "Alexander Christie Chronograph",
+        description: "Sporty & bold design.",
+        price: "Rp1.750.000",
+        image: "https://images.unsplash.com/photo-1572546118250-5831eda05059?w=500&auto=format&fit=crop&q=60",
+        detailPage: "produk-detail.html?product=ACChronograph"
+      },
+      {
+        name: "Alexander Christie Premium",
+        description: "Elegant rose gold finish.",
+        price: "Rp2.200.000",
+        image: "https://plus.unsplash.com/premium_photo-1728759436692-3e0827511e78?w=500&auto=format&fit=crop&q=60",
+        detailPage: "produk-detail.html?product=ACPremium"
+      }
+    ];
+
+    const productList = document.getElementById("product-list");
+
+    products.forEach(product => {
+      const card = document.createElement("div");
+      card.className = "border rounded-lg p-4 shadow hover:shadow-xl";
+
+      card.innerHTML = `
+        <img src="${product.image}" alt="${product.name}" class="w-full h-64 object-cover rounded mb-4" />
+        <h4 class="text-xl font-semibold mb-2">${product.name}</h4>
+        <p class="text-gray-600 mb-2">${product.description}</p>
+        <p class="text-black font-bold mb-2">${product.price}</p>
+        <a href="${product.detailPage}" class="bg-black text-white px-4 py-2 rounded hover:bg-yellow-500 transition">View Details</a>
+      `;
+
+      productList.appendChild(card);
+    });
+  </script>
+</body>
+</html>

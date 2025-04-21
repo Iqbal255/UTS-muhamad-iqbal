@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Keranjang Belanja - Home Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-800 font-sans">
+
+  <!-- Navbar -->
+  <header class="bg-black text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold tracking-wide">Home Store</h1>
+      <nav class="space-x-6">
+        <a href="index.html" class="hover:text-yellow-400">Home</a>
+        <a href="produk.html" class="hover:text-yellow-400">Products</a>
+        <a href="keranjang.html" class="hover:text-yellow-400">Cart</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Keranjang -->
+  <section class="py-16">
+    <div class="max-w-5xl mx-auto px-6">
+      <h3 class="text-3xl font-bold mb-8">Keranjang Belanja</h3>
+
+      <!-- Daftar item di keranjang -->
+      <div id="cart-items" class="space-y-6"></div>
+
+      <!-- Total dan tombol checkout -->
+      <div id="cart-summary" class="mt-10 text-right hidden">
+        <p class="text-2xl font-bold mb-4">Total: <span id="total-price">Rp0</span></p>
+        <button onclick="checkout()" class="bg-yellow-500 text-black px-6 py-3 rounded hover:bg-yellow-600 transition">Checkout</button>
+      </div>
+
+      <!-- Pesan jika keranjang kosong -->
+      <div id="empty-message" class="text-center text-gray-600 text-lg mt-10 hidden">
+        Keranjang kamu masih kosong.
+      </div>
+    </div>
+  </section>
+
+  <!-- Script Keranjang -->
+  <script>
+    const cartItemsContainer = document.getElementById("cart-items");
+    const totalPriceElement = document.getElementById("total-price");
+    const cartSummary = document.getElementById("cart-summary");
+    const emptyMessage = document.getElementById("empty-message");
+
+    function loadCart() {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      if (cart.length === 0) {
+        emptyMessage.classList.remove("hidden");
+        cartSummary.classList.add("hidden");
+        return;
+      }
+
+      let total = 0;
+      cartItemsContainer.innerHTML = "";
+
+      cart.forEach((item, index) => {
+        const numericPrice = parseInt(item.price.toString().replace(/[^0-9]/g, ''));
+        const subtotal = numericPrice * (item.qty || 1);
+        total += subtotal;
+
+        const cartItem = document.createElement("div");
+        cartItem.className = "flex justify-between items-center border-b pb-4";
+
+        cartItem.innerHTML = `
+          <div class="flex gap-4">
+            <img src="${item.image}" alt="${item.name}" class="w-24 h-24 object-cover rounded shadow">
+            <div>
+              <h4 class="text-xl font-semibold">${item.name}</h4>
+              <p class="text-gray-600">Rp${numericPrice.toLocaleString()}</p>
+              <div class="flex items-center mt-2">
+                <label class="mr-2">Qty:</label>
+                <input type="number" min="1" value="${item.qty || 1}" onchange="updateQty(${index}, this.value)" class="w-16 border rounded px-2 py-1 text-center">
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="text-lg font-semibold mb-2">Rp${subtotal.toLocaleString()}</p>
+            <button onclick="removeItem(${index})" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">Hapus</button>
+          </div>
+        `;
+
+        cartItemsContainer.appendChild(cartItem);
+      });
+
+      totalPriceElement.innerText = `Rp${total.toLocaleString()}`;
+      cartSummary.classList.remove("hidden");
+    }
+
+    function removeItem(index) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      loadCart();
+    }
+
+    function updateQty(index, newQty) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (newQty < 1) newQty = 1;  // Menjaga jumlah minimal 1
+      cart[index].qty = parseInt(newQty);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      loadCart();
+    }
+
+    function checkout() {
+      window.location.href = "struk.html";  // Arahkan ke halaman struk
+    }
+
+    loadCart();
+  </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Struk Belanja - Home Store</title>
+  <style>
+    body {
+      font-family: monospace;
+      background: #f3f4f6;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .receipt {
+      width: 58mm;
+      background: white;
+      padding: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .receipt h2 {
+      text-align: center;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .line {
+      border-top: 1px dashed #000;
+      margin: 8px 0;
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    .item-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .total {
+      text-align: right;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    #print-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tombol Cetak -->
+  <button id="print-button" onclick="window.print();">Cetak Struk</button>
+
+  <div class="receipt">
+    <h2>HOME STORE</h2>
+    <p style="text-align:center;">Jl. Online No.123 - Bandung</p>
+    <div class="line"></div>
+    <div id="items"></div>
+    <div class="line"></div>
+    <div class="total" id="total">Total: Rp 0</div>
+    <p style="text-align:center; margin-top:20px;">Terima kasih 😊</p>
+  </div>
+
+  <script>
+    const itemsContainer = document.getElementById('items');
+    const totalDisplay = document.getElementById('total');
+
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    const summary = {};
+    cart.forEach(item => {
+      let cleanPrice = parseInt(item.price.toString().replace(/[^\d]/g, ''));
+      if (summary[item.name]) {
+        summary[item.name].qty += item.qty;
+        summary[item.name].total += cleanPrice * item.qty;
+      } else {
+        summary[item.name] = {
+          price: cleanPrice,
+          qty: item.qty,
+          total: cleanPrice * item.qty
+        };
+      }
+    });
+
+    let grandTotal = 0;
+    for (const [name, detail] of Object.entries(summary)) {
+      grandTotal += detail.total;
+      itemsContainer.innerHTML += `
+        <div class="item">
+          <div class="item-details">
+            <span>${name}</span>
+            <small>${detail.qty} x Rp ${detail.price.toLocaleString()}</small>
+          </div>
+          <div>Rp ${detail.total.toLocaleString()}</div>
+        </div>
+      `;
+    }
+
+    totalDisplay.innerText = `Total: Rp ${grandTotal.toLocaleString()}`;
+
+    // Auto clear cart & redirect setelah cetak
+    window.onafterprint = function () {
+      localStorage.removeItem("cart");
+      window.location.href = "index.html"; // Ganti kalau mau ke halaman lain
+    };
+  </script>
+
+</body>
+</html>
